@@ -40,6 +40,8 @@ if(isset($_POST['register_button'])) {
     }
 
     if(!empty($name) && !empty($email) && !empty($address) && !empty($password) && !empty($confirm_password) && $confirm_password == $password) {
+
+        //data added to the database and go to the login page
         $sql = "INSERT INTO users (name, email, address, password) VALUES (:name, :email, :address, :password)";
 
         $statement = $dbconnection->prepare($sql);
@@ -50,15 +52,20 @@ if(isset($_POST['register_button'])) {
         ":address" => $address,
         ":password" => md5($password), //Encryption password added to db_table
         ]);
-
-        if(isset($result)) {        
-            echo "<script> alert('Your registration is successfully!');</script>";
+        //$result == 1;
+        
+        if(!empty($result)) {                    
+            echo "<script> alert('Your registration is successful!');</script>";
             header('location:login.php');
         } else {
-            echo "<script> alert('Sorry, Your registration is not successfully!');</script>";         
+            echo "<script> alert('Sorry, Your registration is not successfull!');</script>";         
         }     
+        
 
     }
+
+
+
 
        
 }
@@ -70,6 +77,7 @@ if(isset($_POST['register_button'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
     <title>Document</title>
     <style>
         body {
@@ -78,6 +86,9 @@ if(isset($_POST['register_button'])) {
     </style>
 </head>
 <body>
+   
+
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">                
@@ -101,8 +112,8 @@ if(isset($_POST['register_button'])) {
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                         <div class="card">
-                        <div class="card-header bg-info">
-                            <div class="card-title">
+                        <div class="card-header bg-primary">
+                            <div class="card-title text-white">
                                 Register                        
                             </div>
                         </div>
@@ -157,9 +168,9 @@ if(isset($_POST['register_button'])) {
                                 
                             
                         </div>
-                        <div class="card-footer bg-info">
+                        <div class="card-footer bg-primary">
                             <button type="submit" name="register_button" class="btn btn-danger">Register</button>
-                            <span class="float-right">If you already had an account,<a href="login.php" class="text-white"> Login here</a></span>
+                            <span class="float-right text-white mt-2">If you already had an account,<a href="login.php" class="text-dark font-weight-bold"> Login here</a></span>
                         </div>
                         </form>
 
@@ -184,5 +195,6 @@ if(isset($_POST['register_button'])) {
     
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </body>
 </html>

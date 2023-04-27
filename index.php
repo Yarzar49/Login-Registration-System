@@ -17,6 +17,7 @@ include 'connect.php';
     </style>
 </head>
 <body>
+    
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">                
@@ -34,7 +35,7 @@ include 'connect.php';
                                 <a href="login.php" class="float-right text-white"><h6>Login</h6></a>
                                 
                             </div>
-                        </div>              
+                        </div>                               
                     
                     </div>
                     <div class="card-body">

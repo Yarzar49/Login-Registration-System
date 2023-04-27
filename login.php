@@ -1,3 +1,48 @@
+<?php
+session_start();
+include 'connect.php';
+
+
+
+$error = "";
+
+$email = '';
+$password = ''; 
+if(isset($_POST['loginButton'])) {   
+    
+    
+    
+    $email = trim($_POST['email']); //use trim() to delete space
+    $password = md5(trim($_POST['password']));
+    
+    //Read data from databse table
+    $statement = $dbconnection->query("SELECT * FROM users WHERE email='$email' AND password='$password' ");    
+    
+    
+   
+  
+    if($statement->rowCount() >= 1) {
+        $result = $statement->fetch();
+
+        echo $result['role'];        
+        $_SESSION['user'] = $result;  
+
+        //Admin dashboard or user dashboard
+        if($result['role'] == 'user') {
+            header('location:user-dashboard.php');
+        } else {
+            header('location:admin_dashboard.php'); 
+        }
+                       
+        
+    } else {       
+        $error = "Invalid Email or Password";        
+    }
+    
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +58,7 @@
     </style>
 </head>
 <body>
+   
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">                
@@ -36,30 +82,43 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                         <div class="card">
-                        <div class="card-header bg-info">
-                            <div class="card-title">
+                        <div class="card-header bg-primary">
+                            <div class="card-title text-white">
                                 Login                        
                             </div>
                         </div>
-                        <div class="card-body">
-                            <form>
-                                
+                        <form action="login.php" method="POST">
+                        <div class="card-body"> 
+                        <?php
+                        if($error != ""): ?>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong><?php echo $error; ?></strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>                           
+
+                        <?php endif ?>                           
+                        
+                                                                        
                                 <div class="form-group">
                                     <label class="form-label">Email</label>
-                                    <input type="email" class="form-control">                                
+                                    <input type="email" class="form-control" name="email" value="<?php echo $email; ?>" >  
+                                                                  
                                 </div>
                                 
                                 <div class="form-group">
                                     <label class="form-label">Password</label>
-                                    <input type="password" class="form-control">                                
-                                </div>                                
-                                
-                            </form>
+                                    <input type="password" class="form-control" name="password" value="<?php echo $password; ?>" >                                
+                                </div>           
+                                                            
                         </div>
-                        <div class="card-footer bg-info">
-                            <button class="btn btn-danger">Login</button>
-                            <span class="float-right">If you have no account yet, <a href="register.php" class="text-white">reigister here</a></span>
+                        <div class="card-footer bg-primary">
+                            <button type="submit"class="btn btn-danger" name="loginButton">Login</button>
+                            <span class="float-right text-white mt-2">If you have no account yet, <a href="register.php" class="text-dark font-weight-bold">reigister here</a></span>
                         </div>
+                        
+                        </form>
 
                         </div>
                     
@@ -80,5 +139,9 @@
     
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+ <!-- //sweeAlert package -->
 </body>
 </html>
